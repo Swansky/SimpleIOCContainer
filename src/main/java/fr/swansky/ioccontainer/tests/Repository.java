@@ -7,7 +7,7 @@ import fr.swansky.ioccontainer.annotations.Service;
 public class Repository {
 
     @Autowired
-    public Repository(SwansPlugin swansPlugin) {
+    public Repository() {
         System.out.println("repository created !");
     }
 }

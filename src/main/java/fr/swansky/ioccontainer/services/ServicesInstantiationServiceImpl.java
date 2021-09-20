@@ -1,5 +1,6 @@
 package fr.swansky.ioccontainer.services;
 
+import fr.swansky.ioccontainer.config.SwansIOCConfig;
 import fr.swansky.ioccontainer.exceptions.InstanceCreationException;
 import fr.swansky.ioccontainer.exceptions.InstantiationsException;
 import fr.swansky.ioccontainer.models.EnqueuedServiceDetails;
@@ -14,32 +15,37 @@ public class ServicesInstantiationServiceImpl implements ServicesInstantiationSe
     private final ObjectInstantiationService objectInstantiationService;
     private final LinkedList<EnqueuedServiceDetails> enqueuedServiceDetailsList;
     private final List<ServiceDetails> resolvedServices;
-    private final int MAX_ITERATION = 10000;
+    private final SwansIOCConfig swansIOCConfig;
+    private final List<Class<?>> alreadyInstantiated;
 
-    public ServicesInstantiationServiceImpl() {
+    public ServicesInstantiationServiceImpl(SwansIOCConfig swansIOCConfig) {
+        this.swansIOCConfig = swansIOCConfig;
         objectInstantiationService = new ObjectInstantiationServiceImpl();
         enqueuedServiceDetailsList = new LinkedList<>();
         this.resolvedServices = new ArrayList<>();
+        alreadyInstantiated = new ArrayList<>();
     }
 
     @Override
     public List<ServiceDetails> instantiateServices(Set<ServiceDetails> serviceDetailsSet) throws InstanceCreationException {
+        this.alreadyInstantiated.clear();
+        this.resolvedServices.clear();
+        enqueuedServiceDetailsList.clear();
 
         init(serviceDetailsSet);
         int iteration = 0;
         while (!this.enqueuedServiceDetailsList.isEmpty()) {
-            if (iteration > MAX_ITERATION) {
+            if (iteration > swansIOCConfig.getMaxIteration()) {
                 throw new InstantiationsException("Max iteration for instantiation loop.");
             }
             iteration++;
             EnqueuedServiceDetails enqueuedServiceDetails = this.enqueuedServiceDetailsList.removeFirst();
 
+            if (this.alreadyInstantiated.contains(enqueuedServiceDetails.getServiceDetails().getServiceType())) {
+                continue;
+            }
             if (enqueuedServiceDetails.isResolved()) {
-                this.objectInstantiationService.createInstance(
-                        enqueuedServiceDetails.getServiceDetails(),
-                        enqueuedServiceDetails.getDependantsInstances()
-                );
-                this.registerInstantiatedService(enqueuedServiceDetails);
+                createInstanceOfService(enqueuedServiceDetails);
             } else {
                 this.enqueuedServiceDetailsList.addLast(enqueuedServiceDetails);
             }
@@ -47,10 +53,19 @@ public class ServicesInstantiationServiceImpl implements ServicesInstantiationSe
         return resolvedServices;
     }
 
+    private void createInstanceOfService(EnqueuedServiceDetails enqueuedServiceDetails) throws InstanceCreationException {
+        this.objectInstantiationService.createInstance(
+                enqueuedServiceDetails.getServiceDetails(),
+                enqueuedServiceDetails.getDependantsInstances()
+        );
+        this.registerInstantiatedService(enqueuedServiceDetails);
+    }
+
     private void registerInstantiatedService(EnqueuedServiceDetails enqueuedServiceDetails) {
         for (EnqueuedServiceDetails enqueuedService : this.enqueuedServiceDetailsList) {
             enqueuedService.addDependency(enqueuedServiceDetails.getServiceDetails());
         }
+        alreadyInstantiated.add(enqueuedServiceDetails.getServiceDetails().getServiceType());
         resolvedServices.add(enqueuedServiceDetails.getServiceDetails());
     }
 
