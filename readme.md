@@ -1,8 +1,10 @@
-###### **Simple IOC Container**
-Work with @Service annotation
-Possible to add custom annotation with configuration
+# **Simple IOC Container**
+- Work with @Service annotation
+- Possible to add custom annotation with configuration
 
 
+
+## **How to add custom annotations**  
 Create Annotation with Retention policy runtime.
 ```java
     @Target(ElementType.TYPE)
@@ -11,7 +13,7 @@ Create Annotation with Retention policy runtime.
     }
  ```
 
-create config and add this Annotation class.
+create config and add to this Annotation class.
 ```java
    public static void main(String[] args) {
 
