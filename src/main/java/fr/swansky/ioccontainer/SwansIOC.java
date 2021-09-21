@@ -27,7 +27,7 @@ public class SwansIOC {
 
         try {
             SwansIOCConfig swansIOCConfig = new SwansIOCConfig();
-            swansIOCConfig.addCustomAnnotation(CommandContainer.class);
+            swansIOCConfig.addCustomAnnotations(CommandContainer.class);
             run(SwansIOC.class,swansIOCConfig);
             Set<ServiceDetails> serviceWithAnnotation = getServiceWithAnnotation(CommandContainer.class);
             System.out.println(serviceWithAnnotation);

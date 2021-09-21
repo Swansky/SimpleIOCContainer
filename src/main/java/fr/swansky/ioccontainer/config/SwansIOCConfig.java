@@ -34,4 +34,10 @@ public class SwansIOCConfig {
             customAnnotations.add(customAnnotation);
         }
     }
+    @SafeVarargs
+    public final void addCustomAnnotations(Class<? extends Annotation>... customAnnotations) {
+        for (Class<? extends Annotation> customAnnotation : customAnnotations) {
+            addCustomAnnotation(customAnnotation);
+        }
+    }
 }
