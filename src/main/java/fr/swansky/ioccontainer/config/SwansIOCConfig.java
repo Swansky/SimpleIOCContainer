@@ -3,17 +3,15 @@ package fr.swansky.ioccontainer.config;
 import fr.swansky.ioccontainer.annotations.Service;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class SwansIOCConfig {
-    private final List<Class<? extends Annotation>> customAnnotations;
+    private final Set<Class<? extends Annotation>> customAnnotations;
     private int maxIteration = 10000;
 
 
     public SwansIOCConfig() {
-        this.customAnnotations = new ArrayList<>();
+        this.customAnnotations = new HashSet<>();
     }
 
 
@@ -25,8 +23,8 @@ public class SwansIOCConfig {
         this.maxIteration = maxIteration;
     }
 
-    public List<Class<? extends Annotation>> getCustomAnnotations() {
-        return Collections.unmodifiableList(customAnnotations);
+    public Set<Class<? extends Annotation>> getCustomAnnotations() {
+        return customAnnotations;
     }
 
     public void addCustomAnnotation(Class<? extends Annotation> customAnnotation) {

@@ -1,8 +1,10 @@
 package fr.swansky.ioccontainer.tests.commands;
 
+import fr.swansky.ioccontainer.tests.SwansPlugin;
+
 @CommandContainer
 public class AdminCommands {
-    public AdminCommands() {
-        System.out.println("admin commands");
+    public AdminCommands(SwansPlugin swansPlugin) {
+        System.out.println("admin commands"+swansPlugin.hashCode());
     }
 }

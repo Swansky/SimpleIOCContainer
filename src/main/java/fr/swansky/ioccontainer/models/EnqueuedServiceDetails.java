@@ -1,14 +1,16 @@
 package fr.swansky.ioccontainer.models;
 
+import fr.swansky.swansAPI.models.ScannedClassDetails;
+
 public class EnqueuedServiceDetails {
-    private final ServiceDetails serviceDetails;
+    private final ScannedClassDetails scannedClassDetails;
     private final Class<?>[] neededClass;
     private final Object[] dependantsInstances;
 
-    public EnqueuedServiceDetails(ServiceDetails serviceDetails) {
+    public EnqueuedServiceDetails(ScannedClassDetails scannedClassDetails) {
 
-        this.serviceDetails = serviceDetails;
-        neededClass = serviceDetails.getConstructor().getParameterTypes();
+        this.scannedClassDetails = scannedClassDetails;
+        neededClass = scannedClassDetails.getConstructor().getParameterTypes();
         dependantsInstances = new Object[neededClass.length];
     }
 
@@ -21,28 +23,28 @@ public class EnqueuedServiceDetails {
         return true;
     }
 
-    public ServiceDetails getServiceDetails() {
-        return serviceDetails;
+    public ScannedClassDetails getServiceDetails() {
+        return scannedClassDetails;
     }
 
     public Object[] getDependantsInstances() {
         return dependantsInstances;
     }
 
-    public boolean isDependencyRequired(ServiceDetails serviceDetails) {
+    public boolean isDependencyRequired(ScannedClassDetails scannedClassDetails) {
         for (Class<?> aClass : neededClass) {
-            if (aClass.equals(serviceDetails.getServiceType())) {
+            if (aClass.equals(scannedClassDetails.getClassType())) {
                 return true;
             }
         }
         return false;
     }
 
-    public void addDependency(ServiceDetails serviceDetails) {
-        if (isDependencyRequired(serviceDetails)) {
+    public void addDependency(ScannedClassDetails scannedClassDetails) {
+        if (isDependencyRequired(scannedClassDetails)) {
             for (int i = 0; i < this.neededClass.length; i++) {
-                if (this.neededClass[i].equals(serviceDetails.getServiceType())) {
-                    dependantsInstances[i] = serviceDetails.getInstance();
+                if (this.neededClass[i].equals(scannedClassDetails.getClassType())) {
+                    dependantsInstances[i] = scannedClassDetails.getInstance();
                 }
             }
         }

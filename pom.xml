@@ -52,4 +52,21 @@
             </plugin>
         </plugins>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>fr.swansky</groupId>
+            <artifactId>swansAPI</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.swansky</groupId>
+            <artifactId>SwansJPA</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.12</version>
+        </dependency>
+    </dependencies>
 </project>

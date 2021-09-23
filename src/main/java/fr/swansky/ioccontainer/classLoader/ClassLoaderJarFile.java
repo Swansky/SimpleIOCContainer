@@ -11,7 +11,7 @@ import java.util.jar.JarFile;
 
 import static fr.swansky.ioccontainer.constants.Constants.JAVA_BINARY_EXTENSION;
 
-public class ClassLoaderJarFile implements ClassLoader {
+public class ClassLoaderJarFile implements ClassLoader<Object> {
     @Override
     public Set<Class<?>> locateClass(String path) throws ClassLocationException {
         Set<Class<?>> classes = new HashSet<>();

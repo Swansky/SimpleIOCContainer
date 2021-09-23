@@ -4,6 +4,6 @@ import fr.swansky.ioccontainer.exceptions.ClassLocationException;
 
 import java.util.Set;
 
-public interface ClassLoader {
-    Set<Class<?>> locateClass(String path) throws ClassLocationException;
+public interface ClassLoader<T> {
+    Set<Class<? extends T>> locateClass(String path) throws ClassLocationException;
 }

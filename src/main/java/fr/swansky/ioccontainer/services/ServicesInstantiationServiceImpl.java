@@ -1,10 +1,10 @@
 package fr.swansky.ioccontainer.services;
 
-import fr.swansky.ioccontainer.config.SwansIOCConfig;
+import fr.swansky.ioccontainer.constants.Constants;
 import fr.swansky.ioccontainer.exceptions.InstanceCreationException;
 import fr.swansky.ioccontainer.exceptions.InstantiationsException;
 import fr.swansky.ioccontainer.models.EnqueuedServiceDetails;
-import fr.swansky.ioccontainer.models.ServiceDetails;
+import fr.swansky.swansAPI.models.ScannedClassDetails;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,12 +14,12 @@ import java.util.Set;
 public class ServicesInstantiationServiceImpl implements ServicesInstantiationService {
     private final ObjectInstantiationService objectInstantiationService;
     private final LinkedList<EnqueuedServiceDetails> enqueuedServiceDetailsList;
-    private final List<ServiceDetails> resolvedServices;
-    private final SwansIOCConfig swansIOCConfig;
+    private final List<ScannedClassDetails> resolvedServices;
+
     private final List<Class<?>> alreadyInstantiated;
 
-    public ServicesInstantiationServiceImpl(SwansIOCConfig swansIOCConfig) {
-        this.swansIOCConfig = swansIOCConfig;
+    public ServicesInstantiationServiceImpl() {
+
         objectInstantiationService = new ObjectInstantiationServiceImpl();
         enqueuedServiceDetailsList = new LinkedList<>();
         this.resolvedServices = new ArrayList<>();
@@ -27,21 +27,21 @@ public class ServicesInstantiationServiceImpl implements ServicesInstantiationSe
     }
 
     @Override
-    public List<ServiceDetails> instantiateServices(Set<ServiceDetails> serviceDetailsSet) throws InstanceCreationException {
+    public List<ScannedClassDetails> instantiateServices(Set<ScannedClassDetails> scannedClassDetailsSet) throws InstanceCreationException {
         this.alreadyInstantiated.clear();
         this.resolvedServices.clear();
         enqueuedServiceDetailsList.clear();
 
-        init(serviceDetailsSet);
+        init(scannedClassDetailsSet);
         int iteration = 0;
         while (!this.enqueuedServiceDetailsList.isEmpty()) {
-            if (iteration > swansIOCConfig.getMaxIteration()) {
+            if (iteration > Constants.MAX_ITERATION) {
                 throw new InstantiationsException("Max iteration for instantiation loop.");
             }
             iteration++;
             EnqueuedServiceDetails enqueuedServiceDetails = this.enqueuedServiceDetailsList.removeFirst();
 
-            if (this.alreadyInstantiated.contains(enqueuedServiceDetails.getServiceDetails().getServiceType())) {
+            if (this.alreadyInstantiated.contains(enqueuedServiceDetails.getServiceDetails().getClassType())) {
                 continue;
             }
             if (enqueuedServiceDetails.isResolved()) {
@@ -54,7 +54,7 @@ public class ServicesInstantiationServiceImpl implements ServicesInstantiationSe
     }
 
     private void createInstanceOfService(EnqueuedServiceDetails enqueuedServiceDetails) throws InstanceCreationException {
-        this.objectInstantiationService.createInstance(
+        this.objectInstantiationService.createInstanceService(
                 enqueuedServiceDetails.getServiceDetails(),
                 enqueuedServiceDetails.getDependantsInstances()
         );
@@ -65,14 +65,14 @@ public class ServicesInstantiationServiceImpl implements ServicesInstantiationSe
         for (EnqueuedServiceDetails enqueuedService : this.enqueuedServiceDetailsList) {
             enqueuedService.addDependency(enqueuedServiceDetails.getServiceDetails());
         }
-        alreadyInstantiated.add(enqueuedServiceDetails.getServiceDetails().getServiceType());
+        alreadyInstantiated.add(enqueuedServiceDetails.getServiceDetails().getClassType());
         resolvedServices.add(enqueuedServiceDetails.getServiceDetails());
     }
 
-    private void init(Set<ServiceDetails> serviceDetailsSet) throws InstanceCreationException {
+    private void init(Set<ScannedClassDetails> scannedClassDetailsSet) {
 
-        for (ServiceDetails serviceDetails : serviceDetailsSet) {
-            enqueuedServiceDetailsList.add(new EnqueuedServiceDetails(serviceDetails));
+        for (ScannedClassDetails scannedClassDetails : scannedClassDetailsSet) {
+            enqueuedServiceDetailsList.add(new EnqueuedServiceDetails(scannedClassDetails));
         }
     }
 }
