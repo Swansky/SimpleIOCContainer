@@ -28,3 +28,8 @@ create config and add to this Annotation class.
         }
     }
    ```
+
+
+Api [SwansApi](https://github.com/Swansky/SwansAPI)
+
+Used in [SwansJPA](https://github.com/Swansky/SwansJPA)
