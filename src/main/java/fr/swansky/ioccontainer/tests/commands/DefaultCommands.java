@@ -4,8 +4,7 @@ import fr.swansky.ioccontainer.tests.SwansPlugin;
 
 @CommandContainer
 public class DefaultCommands {
-    public DefaultCommands(SwansPlugin swansPlugin) {
+    public DefaultCommands() {
 
-        System.out.println("default commands"+swansPlugin.hashCode());
     }
 }

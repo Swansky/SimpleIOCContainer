@@ -7,7 +7,6 @@ import fr.swansky.swansAPI.models.ScannedClassDetails;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -63,6 +62,17 @@ public class IOCClassScanning implements ClassScanning {
             if (scannedClassDetails.isPresent()) {
                 scanMethodsByAnnotations(scannedClassDetails.get(), methodAnnotations);
                 scannedClassDetailsSet.add(scannedClassDetails.get());
+            }
+        }
+        return scannedClassDetailsSet;
+    }
+
+    @Override
+    public Set<ScannedClassDetails> scanClassesByAnnotation(Set<Class<?>> classes, Class<? extends Annotation> annotations) {
+        Set<ScannedClassDetails> scannedClassDetailsSet = new HashSet<>();
+        for (Class<?> aClass : classes) {
+            if (aClass.isAnnotationPresent(annotations)) {
+                scannedClassDetailsSet.add(new ScannedClassDetails(aClass, annotations, findConstructor(aClass)));
             }
         }
         return scannedClassDetailsSet;

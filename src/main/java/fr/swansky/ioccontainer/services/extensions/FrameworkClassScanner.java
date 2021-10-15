@@ -2,11 +2,9 @@ package fr.swansky.ioccontainer.services.extensions;
 
 import fr.swansky.ioccontainer.exceptions.InstanceCreationException;
 import fr.swansky.ioccontainer.models.FrameworkExtensionDetails;
-import fr.swansky.swansAPI.classScanning.ClassScanning;
 import fr.swansky.swansAPI.extensions.FrameworkExtension;
 
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,9 +22,8 @@ public class FrameworkClassScanner {
                         = new FrameworkExtensionDetails(extensionsClass, constructor);
                 frameworkExtensionDetailsSet.add(frameworkExtensionDetails);
             }
-
         } catch (NoSuchMethodException e) {
-            throw  new InstanceCreationException(e.getMessage(), e);
+            throw new InstanceCreationException(e.getMessage(), e);
         }
         return frameworkExtensionDetailsSet;
     }

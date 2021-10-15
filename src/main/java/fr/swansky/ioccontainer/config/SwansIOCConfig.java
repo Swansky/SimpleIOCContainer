@@ -28,9 +28,7 @@ public class SwansIOCConfig {
     }
 
     public void addCustomAnnotation(Class<? extends Annotation> customAnnotation) {
-        if (!customAnnotations.contains(customAnnotation)) {
-            customAnnotations.add(customAnnotation);
-        }
+        customAnnotations.add(customAnnotation);
     }
     @SafeVarargs
     public final void addCustomAnnotations(Class<? extends Annotation>... customAnnotations) {

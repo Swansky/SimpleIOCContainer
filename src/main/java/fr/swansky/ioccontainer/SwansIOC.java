@@ -17,7 +17,7 @@ import fr.swansky.ioccontainer.services.ServicesInstantiationServiceImpl;
 import fr.swansky.ioccontainer.services.classScanning.IOCClassScanning;
 import fr.swansky.ioccontainer.services.extensions.ExtensionInstantiationService;
 import fr.swansky.ioccontainer.services.extensions.FrameworkClassScanner;
-import fr.swansky.ioccontainer.tests.commands.CommandContainer;
+import fr.swansky.swansAPI.IOC;
 import fr.swansky.swansAPI.classScanning.ClassScanning;
 import fr.swansky.swansAPI.extensions.FrameworkExtension;
 import fr.swansky.swansAPI.models.ScannedClassDetails;
@@ -27,40 +27,56 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SwansIOC {
-    private static final ServicesInstantiationService servicesInstantiationService = new ServicesInstantiationServiceImpl();
-    private static List<ScannedClassDetails> scannedClassDetails;
-    private static Set<Class<?>> allClassesScan;
-    private static Class<?> startupClass;
-    private static SwansIOCConfig swansIOCConfig;
-    private static ClassScanning classScanning;
+public class SwansIOC implements IOC {
+    private static SwansIOC INSTANCE;
+    private final ServicesInstantiationService servicesInstantiationService = new ServicesInstantiationServiceImpl();
+    private final Class<?> startupClass;
+    private final SwansIOCConfig swansIOCConfig;
+    private final ClassScanning classScanning;
+    private List<ScannedClassDetails> scannedClassDetails;
+    private Set<Class<?>> allClassesScan;
 
-    public static void main(String[] args) {
-        try {
-            SwansIOCConfig swansIOCConfig = new SwansIOCConfig();
-            swansIOCConfig.addCustomAnnotations(CommandContainer.class);
-            run(SwansIOC.class, swansIOCConfig);
-        } catch (InstanceCreationException e) {
-            e.printStackTrace();
-        }
-
+    private SwansIOC(Class<?> startupClass, SwansIOCConfig swansIOCConfig) throws InstanceCreationException {
+        this.startupClass = startupClass;
+        this.swansIOCConfig = swansIOCConfig;
+        classScanning = new IOCClassScanning();
+        loadClasses();
+        loadExtensions();
     }
+
 
     public static void run(Class<?> startupClass) throws InstanceCreationException {
         run(startupClass, new SwansIOCConfig());
     }
 
     public static void run(Class<?> startupClassParam, SwansIOCConfig swansIOCConfigParam) throws InstanceCreationException {
-        startupClass = startupClassParam;
-        swansIOCConfig = swansIOCConfigParam;
-        classScanning = new IOCClassScanning();
-        loadClasses();
-        loadExtensions();
-
+        if (INSTANCE == null)
+            INSTANCE = new SwansIOC(startupClassParam, swansIOCConfigParam);
     }
 
+    public static List<ScannedClassDetails> getServicesDetails() {
+        return INSTANCE.scannedClassDetails;
+    }
 
-    private static void loadClasses() throws InstanceCreationException {
+    public static Set<ScannedClassDetails> getServiceWithAnnotation(Class<? extends Annotation> annotation) {
+        Set<ScannedClassDetails> scannedClassDetailsSet = new HashSet<>();
+        for (ScannedClassDetails serviceDetail : INSTANCE.scannedClassDetails) {
+            if (serviceDetail.getClassAnnotations().contains(annotation)) {
+                scannedClassDetailsSet.add(serviceDetail);
+            }
+        }
+        return scannedClassDetailsSet;
+    }
+
+    public static Set<Class<?>> getAllClassesScan() {
+        return INSTANCE.allClassesScan;
+    }
+
+    public static SwansIOC getInstance() {
+        return INSTANCE;
+    }
+
+    private void loadClasses() throws InstanceCreationException {
         Directory directory = DirectoryResolver.resolveDirectory(startupClass);
 
         ClassLoader<Object> classLoader = new ClassLoaderDirectory();
@@ -76,13 +92,13 @@ public class SwansIOC {
 
     }
 
-    private static Set<Class<? extends Annotation>> getAllDefaultAnnotation() {
+    private Set<Class<? extends Annotation>> getAllDefaultAnnotation() {
         Set<Class<? extends Annotation>> defaultAnnotation = new HashSet<>(swansIOCConfig.getCustomAnnotations());
         defaultAnnotation.add(Service.class);
         return defaultAnnotation;
     }
 
-    private static void loadExtensions() throws InstanceCreationException {
+    private void loadExtensions() throws InstanceCreationException {
         ClassLoader<FrameworkExtension> classLoader = new ClassLoaderExtension();
         Set<Class<? extends FrameworkExtension>> extensionsClasses = classLoader.locateClass(Constants.DEFAULT_PACKAGE);
 
@@ -92,29 +108,12 @@ public class SwansIOC {
             System.out.println(extensionsClasses.size() + " framework extensions find : \t" + extensionsClasses);
         }
         Set<FrameworkExtensionDetails> frameworkExtensionDetails = new FrameworkClassScanner().scanFrameworkClass(extensionsClasses);
-        ExtensionInstantiationService extensionInstantiationService = new ExtensionInstantiationService(classScanning, allClassesScan);
+        ExtensionInstantiationService extensionInstantiationService = new ExtensionInstantiationService(classScanning, allClassesScan,this);
         extensionInstantiationService.createInstanceExtensions(frameworkExtensionDetails);
 
     }
 
-
-    public static List<ScannedClassDetails> getServicesDetails() {
-        return scannedClassDetails;
+    public Class<?> getStartupClass() {
+        return startupClass;
     }
-
-    public static Set<ScannedClassDetails> getServiceWithAnnotation(Class<? extends Annotation> annotation) {
-        Set<ScannedClassDetails> scannedClassDetailsSet = new HashSet<>();
-        for (ScannedClassDetails serviceDetail : scannedClassDetails) {
-            if (serviceDetail.getClassAnnotations().contains(annotation)) {
-                scannedClassDetailsSet.add(serviceDetail);
-            }
-        }
-        return scannedClassDetailsSet;
-    }
-
-    public static Set<Class<?>> getAllClassesScan() {
-        return allClassesScan;
-    }
-
-
 }
