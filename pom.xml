@@ -60,7 +60,7 @@
         </dependency>
         <dependency>
             <groupId>fr.swansky</groupId>
-            <artifactId>SwansJPA</artifactId>
+            <artifactId>DiscordCommandIOC</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>

@@ -1,10 +1,10 @@
 package fr.swansky.ioccontainer.services.extensions;
 
 import fr.swansky.ioccontainer.SwansIOC;
-import fr.swansky.ioccontainer.exceptions.InstanceCreationException;
-import fr.swansky.ioccontainer.models.FrameworkExtensionDetails;
 import fr.swansky.swansAPI.classScanning.ClassScanning;
+import fr.swansky.swansAPI.exception.InstanceCreationException;
 import fr.swansky.swansAPI.extensions.FrameworkExtension;
+import fr.swansky.swansAPI.models.FrameworkExtensionDetails;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -22,6 +22,7 @@ public class ExtensionInstantiationService {
         this.swansIOC = swansIOC;
     }
 
+
     public void createInstanceExtensions(Set<FrameworkExtensionDetails> frameworkExtensionDetailsSet) throws InstanceCreationException {
         try {
             for (FrameworkExtensionDetails frameworkExtensionDetails : frameworkExtensionDetailsSet) {
@@ -37,10 +38,8 @@ public class ExtensionInstantiationService {
         Constructor<? extends FrameworkExtension> constructor = frameworkExtensionDetails.getConstructor();
 
         try {
-            FrameworkExtension object =  constructor.newInstance();
+            FrameworkExtension object = constructor.newInstance();
             frameworkExtensionDetails.setInstance(object);
-            object.setAllScanClass(allScanClasses);
-            object.setClassScanning(classScanning);
             object.setIoc(swansIOC);
             object.load();
 

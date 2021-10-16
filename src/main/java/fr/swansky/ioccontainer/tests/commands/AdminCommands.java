@@ -1,10 +1,10 @@
 package fr.swansky.ioccontainer.tests.commands;
 
-import fr.swansky.ioccontainer.tests.SwansPlugin;
+import fr.swansky.discordCommandIOC.Commands.annotations.CommandsContainer;
 
-@CommandContainer
+@CommandsContainer
 public class AdminCommands {
     public AdminCommands() {
-
+        System.out.println("test admin commands containers");
     }
 }

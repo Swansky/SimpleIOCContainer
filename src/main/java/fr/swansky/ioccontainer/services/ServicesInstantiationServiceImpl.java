@@ -1,10 +1,12 @@
 package fr.swansky.ioccontainer.services;
 
 import fr.swansky.ioccontainer.constants.Constants;
-import fr.swansky.ioccontainer.exceptions.InstanceCreationException;
 import fr.swansky.ioccontainer.exceptions.InstantiationsException;
 import fr.swansky.ioccontainer.models.EnqueuedServiceDetails;
+import fr.swansky.swansAPI.exception.InstanceCreationException;
 import fr.swansky.swansAPI.models.ScannedClassDetails;
+import fr.swansky.swansAPI.services.ObjectInstantiationService;
+import fr.swansky.swansAPI.services.ServicesInstantiationService;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -28,10 +30,6 @@ public class ServicesInstantiationServiceImpl implements ServicesInstantiationSe
 
     @Override
     public List<ScannedClassDetails> instantiateServices(Set<ScannedClassDetails> scannedClassDetailsSet) throws InstanceCreationException {
-        this.alreadyInstantiated.clear();
-        this.resolvedServices.clear();
-        enqueuedServiceDetailsList.clear();
-
         init(scannedClassDetailsSet);
         int iteration = 0;
         while (!this.enqueuedServiceDetailsList.isEmpty()) {
