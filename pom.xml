@@ -59,11 +59,6 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.swansky</groupId>
-            <artifactId>DiscordCommandIOC</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>0.9.12</version>
