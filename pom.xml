@@ -12,6 +12,18 @@
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
     </properties>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://svn.apache.org/viewvc/maven</url>
+    </scm>
     <build>
         <plugins>
             <plugin>
@@ -52,16 +64,29 @@
             </plugin>
         </plugins>
     </build>
-    <dependencies>
-        <dependency>
-            <groupId>fr.swansky</groupId>
-            <artifactId>swansAPI</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.9.12</version>
-        </dependency>
-    </dependencies>
+    <repositories>
+        <repository>
+            <id>maven-zoltowski</id>
+            <name>zoltowski Repository</name>
+            <url>https://maven.zoltowski.fr/releases</url>
+        </repository>
+    </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>fr.swansky</groupId>
+                <artifactId>SwansAPI</artifactId>
+                <version>1.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+    <distributionManagement>
+        <repository>
+            <id>maven-zoltowski</id>
+            <url>https://maven.zoltowski.fr/releases</url>
+        </repository>
+    </distributionManagement>
 </project>
