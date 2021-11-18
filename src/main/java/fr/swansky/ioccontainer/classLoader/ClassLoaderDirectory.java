@@ -4,6 +4,7 @@ import fr.swansky.ioccontainer.exceptions.ClassLocationException;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +18,7 @@ public class ClassLoaderDirectory implements ClassLoader<Object> {
         try {
             Files.walk(Paths.get(path))
                     .filter(Files::isRegularFile)
+                    .filter(this::isClass)
                     .forEach(path1 -> {
                         final String pathName = path1.toAbsolutePath().toString()
                                 .split("/target/classes/")[1]
@@ -36,5 +38,9 @@ public class ClassLoaderDirectory implements ClassLoader<Object> {
 
 
         return classes;
+    }
+
+    private boolean isClass(Path path) {
+        return path.toString().endsWith(".class");
     }
 }
