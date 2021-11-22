@@ -1,10 +1,10 @@
 package fr.swansky.ioccontainer.services.extensions;
 
 import fr.swansky.ioccontainer.SwansIOC;
-import swansAPI.classScanning.ClassScanning;
-import swansAPI.exception.InstanceCreationException;
-import swansAPI.extensions.FrameworkExtension;
-import swansAPI.models.FrameworkExtensionDetails;
+import fr.swansky.swansAPI.classScanning.ClassScanning;
+import fr.swansky.swansAPI.exception.InstanceCreationException;
+import fr.swansky.swansAPI.extensions.FrameworkExtension;
+import fr.swansky.swansAPI.models.FrameworkExtensionDetails;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

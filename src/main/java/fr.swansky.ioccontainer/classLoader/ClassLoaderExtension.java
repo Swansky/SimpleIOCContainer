@@ -1,8 +1,9 @@
 package fr.swansky.ioccontainer.classLoader;
 
 import fr.swansky.ioccontainer.exceptions.ClassLocationException;
+import fr.swansky.swansAPI.extensions.FrameworkExtension;
 import org.reflections.Reflections;
-import swansAPI.extensions.FrameworkExtension;
+
 
 import java.util.Set;
 

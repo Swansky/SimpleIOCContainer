@@ -14,14 +14,14 @@ import fr.swansky.ioccontainer.services.ServicesInstantiationServiceImpl;
 import fr.swansky.ioccontainer.services.classScanning.IOCClassScanning;
 import fr.swansky.ioccontainer.services.extensions.ExtensionInstantiationService;
 import fr.swansky.ioccontainer.services.extensions.FrameworkClassScanner;
-import swansAPI.IOC;
-import swansAPI.classScanning.ClassScanning;
-import swansAPI.config.ConfigExtensionManager;
-import swansAPI.exception.InstanceCreationException;
-import swansAPI.extensions.FrameworkExtension;
-import swansAPI.models.FrameworkExtensionDetails;
-import swansAPI.models.ScannedClassDetails;
-import swansAPI.services.ServicesInstantiationService;
+import fr.swansky.swansAPI.IOC;
+import fr.swansky.swansAPI.classScanning.ClassScanning;
+import fr.swansky.swansAPI.config.ConfigExtensionManager;
+import fr.swansky.swansAPI.exception.InstanceCreationException;
+import fr.swansky.swansAPI.extensions.FrameworkExtension;
+import fr.swansky.swansAPI.models.FrameworkExtensionDetails;
+import fr.swansky.swansAPI.models.ScannedClassDetails;
+import fr.swansky.swansAPI.services.ServicesInstantiationService;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
@@ -45,12 +45,15 @@ public class SwansIOC implements IOC {
         classScanning = new IOCClassScanning();
 
     }
-
-    public static SwansIOC CreateIOC(Class<?> startupClass) throws InstanceCreationException {
-        return CreateIOC(startupClass, new SwansIOCConfig());
+    public void createIOC() throws InstanceCreationException {
+        loadClasses();
+        loadExtensions();
+    }
+    public static SwansIOC InitIOC(Class<?> startupClass) throws InstanceCreationException {
+        return InitIOC(startupClass, new SwansIOCConfig());
     }
 
-    public static SwansIOC CreateIOC(Class<?> startupClassParam, SwansIOCConfig swansIOCConfigParam) throws InstanceCreationException {
+    public static SwansIOC InitIOC(Class<?> startupClassParam, SwansIOCConfig swansIOCConfigParam) throws InstanceCreationException {
         if (INSTANCE == null)
             INSTANCE = new SwansIOC(startupClassParam, swansIOCConfigParam);
         return INSTANCE;

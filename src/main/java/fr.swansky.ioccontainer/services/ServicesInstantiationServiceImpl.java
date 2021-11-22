@@ -3,10 +3,10 @@ package fr.swansky.ioccontainer.services;
 import fr.swansky.ioccontainer.constants.Constants;
 import fr.swansky.ioccontainer.exceptions.InstantiationsException;
 import fr.swansky.ioccontainer.models.EnqueuedServiceDetails;
-import swansAPI.exception.InstanceCreationException;
-import swansAPI.models.ScannedClassDetails;
-import swansAPI.services.ObjectInstantiationService;
-import swansAPI.services.ServicesInstantiationService;
+import fr.swansky.swansAPI.exception.InstanceCreationException;
+import fr.swansky.swansAPI.models.ScannedClassDetails;
+import fr.swansky.swansAPI.services.ObjectInstantiationService;
+import fr.swansky.swansAPI.services.ServicesInstantiationService;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

@@ -2,8 +2,8 @@ package fr.swansky.ioccontainer.services.classScanning;
 
 import fr.swansky.ioccontainer.annotations.Autowired;
 
-import swansAPI.classScanning.ClassScanning;
-import swansAPI.models.ScannedClassDetails;
+import fr.swansky.swansAPI.classScanning.ClassScanning;
+import fr.swansky.swansAPI.models.ScannedClassDetails;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;

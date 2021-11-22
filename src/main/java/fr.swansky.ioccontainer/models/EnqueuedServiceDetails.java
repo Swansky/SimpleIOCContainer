@@ -1,7 +1,7 @@
 package fr.swansky.ioccontainer.models;
 
 
-import swansAPI.models.ScannedClassDetails;
+import fr.swansky.swansAPI.models.ScannedClassDetails;
 
 public class EnqueuedServiceDetails {
     private final ScannedClassDetails scannedClassDetails;

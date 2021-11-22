@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "fr.swansky"
-version = "1.0.4"
+version = "1.0.5"
 
 repositories {
     mavenCentral()
@@ -16,7 +16,7 @@ repositories {
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    implementation("fr.swansky:SwansAPI:1.0.3")
+    implementation("fr.swansky:SwansAPI:1.0.4")
     implementation("org.reflections:reflections:0.10.2")
 }
 
@@ -40,3 +40,5 @@ publishing {
 }
 
 apply(plugin = "net.linguica.maven-settings")
+
+

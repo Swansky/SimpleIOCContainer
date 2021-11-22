@@ -1,8 +1,8 @@
 package fr.swansky.ioccontainer.services.extensions;
 
-import swansAPI.exception.InstanceCreationException;
-import swansAPI.extensions.FrameworkExtension;
-import swansAPI.models.FrameworkExtensionDetails;
+import fr.swansky.swansAPI.exception.InstanceCreationException;
+import fr.swansky.swansAPI.extensions.FrameworkExtension;
+import fr.swansky.swansAPI.models.FrameworkExtensionDetails;
 
 import java.lang.reflect.Constructor;
 import java.util.HashSet;
