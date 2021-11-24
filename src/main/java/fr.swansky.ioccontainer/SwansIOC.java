@@ -45,10 +45,7 @@ public class SwansIOC implements IOC {
         classScanning = new IOCClassScanning();
 
     }
-    public void createIOC() throws InstanceCreationException {
-        loadClasses();
-        loadExtensions();
-    }
+
     public static SwansIOC InitIOC(Class<?> startupClass) throws InstanceCreationException {
         return InitIOC(startupClass, new SwansIOCConfig());
     }
@@ -81,12 +78,17 @@ public class SwansIOC implements IOC {
         return INSTANCE;
     }
 
+    public void startIOC() throws InstanceCreationException {
+        loadClasses();
+        loadExtensions();
+    }
+
     private void loadClasses() throws InstanceCreationException {
         Directory directory = DirectoryResolver.resolveDirectory(startupClass);
 
         ClassLoader<Object> classLoader = new ClassLoaderDirectory();
         if (directory.getDirectoryType() == DirectoryType.JAR_FILE) {
-            classLoader = new ClassLoaderJarFile();
+            classLoader = new ClassLoaderJarFile(this.swansIOCConfig, this.startupClass);
         }
 
         Set<Class<?>> classes = classLoader.locateClass(directory.getPath());

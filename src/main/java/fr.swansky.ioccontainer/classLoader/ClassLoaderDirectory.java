@@ -21,7 +21,7 @@ public class ClassLoaderDirectory implements ClassLoader<Object> {
                     .filter(this::isClass)
                     .forEach(path1 -> {
                         final String pathName = path1.toAbsolutePath().toString()
-                                .split("/target/classes/")[1]
+                                .split("build/classes/java/main/")[1]
                                 .replaceAll("/", ".")
                                 .replaceAll("\\\\", ".")
                                 .replaceAll(JAVA_BINARY_EXTENSION + "$", "");
@@ -29,13 +29,12 @@ public class ClassLoaderDirectory implements ClassLoader<Object> {
                         try {
                             classes.add(Class.forName(pathName));
                         } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
-                            //throw new ClassLocationException(e.getMessage(), e);
+                            throw new ClassLocationException(e.getMessage(), e);
                         }
                     });
         } catch (IOException e) {
             e.printStackTrace();
-            //throw new ClassLocationException(e.getMessage(), e);
+            throw new ClassLocationException(e.getMessage(), e);
         }
 
 
